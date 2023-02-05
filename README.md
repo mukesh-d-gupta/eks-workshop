@@ -16,6 +16,14 @@ sudo curl -L -o /usr/local/bin/kubectl https://s3.us-west-2.amazonaws.com/amazon
 sudo chmod +x /usr/local/bin/kubectl
 kubectl version --short --client
 
+```
+
+## Install cli
+
+```bash
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install
 
 ```
 
