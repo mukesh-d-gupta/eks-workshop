@@ -29,4 +29,35 @@ source ~/.bash_profile
 aws --version
 
 ```
+## Command
+```bash
+eksctl create cluster -f eks-demo-cluster.yaml
 
+aws ecr create-repository \
+--repository-name demo-flask-backend \
+--image-scanning-configuration scanOnPush=true \
+--region ${AWS_REGION}
+
+aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin $ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
+cd ~/environment/amazon-eks-flask
+
+docker build -t demo-flask-backend .
+docker tag demo-flask-backend:latest $ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/demo-flask-backend:latest
+docker push $ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/demo-flask-backend:latest
+
+
+```
+## Add Console Credential
+
+```bash
+rolearn=$(aws cloud9 describe-environment-memberships --environment-id=$C9_PID | jq -r '.memberships[].userArn')
+
+echo ${rolearn}
+
+assumedrolename=$(echo ${rolearn} | awk -F/ '{print $(NF-1)}')
+rolearn=$(aws iam get-role --role-name ${assumedrolename} --query Role.Arn --output text) 
+eksctl create iamidentitymapping --cluster eks-demo --arn ${rolearn} --group system:masters --username admin
+kubectl describe configmap -n kube-system aws-auth
+
+```
+https://catalog.us-east-1.prod.workshops.aws/workshops/9c0aa9ab-90a9-44a6-abe1-8dff360ae428/en-US
