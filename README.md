@@ -11,7 +11,11 @@ eksctl version
 
 ## Install kubectl 
 
+```bash
 sudo curl -L -o /usr/local/bin/kubectl https://s3.us-west-2.amazonaws.com/amazon-eks/1.24.9/2023-01-11/bin/linux/amd64/kubectl
 sudo chmod +x /usr/local/bin/kubectl
 kubectl version --short --client
+
+
+```
 
